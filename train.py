@@ -23,6 +23,7 @@ def train(model, train_dataloader, valid_dataloader, optimizer, criterion, epoch
 
             
             output = model(image)
+
             optimizer.zero_grad()
 
             loss = criterion(output, label)
@@ -45,10 +46,10 @@ def train(model, train_dataloader, valid_dataloader, optimizer, criterion, epoch
 
             valid_loss += loss.item() * image.size(0)
 
-
             _, predicted = torch.max(output.data, 1)
 
             total += label.size(0)
+            
             correct += (predicted == label).sum().item()
 
 
@@ -69,24 +70,34 @@ def train(model, train_dataloader, valid_dataloader, optimizer, criterion, epoch
 
 if __name__ == '__main__':
 
+
+    base_dir = '/Sanketh/Pytorch-Image-Classification/train'
+    path = '/Sanketh/Pytorch-Image-Classification/train.csv'
+
+    epochs = 50
+    batch_size = 256
+    lr = 0.001
+    image_size = 255
+
     model = CNNNet()
 
     train_transform = transforms.Compose([transforms.ToPILImage(),
-                                    transforms.Resize((255,255)),
+                                    transforms.Resize((image_size,image_size)),
                                     transforms.ToTensor(),
                                     transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225])])
 
-    dataset = ImageDataset('/Sanketh/Pytorch-Image-Classification/train', '/Sanketh/Pytorch-Image-Classification/train.csv',train_transform, True)
+
+    dataset = ImageDataset(base_dir, path, train_transform)
 
     train_dataset, valid_dataset = train_test_split(dataset, test_size=0.2, random_state=42)
 
 
-    train_dataloader = DataLoader(train_dataset, batch_size = 256)
-    valid_dataloader = DataLoader(valid_dataset, batch_size = 256)
+    train_dataloader = DataLoader(train_dataset, batch_size = batch_size)
+    valid_dataloader = DataLoader(valid_dataset, batch_size = batch_size)
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
     criterion = nn.CrossEntropyLoss()
 
-    train(model, train_dataloader, valid_dataloader, optimizer, criterion, 10)
+    train(model, train_dataloader, valid_dataloader, optimizer, criterion, epochs)
 

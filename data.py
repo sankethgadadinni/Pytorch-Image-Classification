@@ -11,6 +11,7 @@ from torch.utils.data import Dataset, DataLoader
 
 
 class ImageDataset(Dataset):
+
     def __init__(self, base_dir, path, transform=None, train=True):
         super().__init__()
 
@@ -19,7 +20,6 @@ class ImageDataset(Dataset):
         self.path = path
         self.data = pd.read_csv(path)
         self.train = train
-
 
     
     def __len__(self):

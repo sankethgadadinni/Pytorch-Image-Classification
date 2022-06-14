@@ -41,26 +41,32 @@ def evaluate(model_path, dataloader):
 
 if __name__ == '__main__':
 
+
+    image_size = 255
+    batch_size = 256
+
+    base_dir = '/Sanketh/Pytorch-Image-Classification/test'
+    path = '/Sanketh/Pytorch-Image-Classification/sample_submission.csv'
+    model_path = '/Sanketh/Pytorch-Image-Classification/model.ckpt'
+
     test_transform = transforms.Compose([transforms.ToPILImage(),
-                                    transforms.Resize((255,255)),
+                                    transforms.Resize((image_size,image_size)),
                                     transforms.ToTensor(),
                                     transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225])])
 
-    test_dataset = ImageDataset('/Sanketh/Pytorch-Image-Classification/test','/Sanketh/Pytorch-Image-Classification/sample_submission.csv', test_transform, False)
 
-    test_dataloader = DataLoader(test_dataset, batch_size = 64)
+    test_dataset = ImageDataset(base_dir, path, test_transform, False)
 
-    model_path = '/Sanketh/Pytorch-Image-Classification/model.ckpt'
+    test_dataloader = DataLoader(test_dataset, batch_size = batch_size)
 
     labels, categories = evaluate(model_path, test_dataloader)
 
-
-    df = pd.read_csv("/Sanketh/Pytorch-Image-Classification/sample_submission.csv")
+    df = pd.read_csv(path)
 
     df['has_cactus'] = labels
     df['category'] = categories
 
-    df.to_csv("submit.csv", index=False)
+    df.to_csv(path, index=False)
 
 
 
