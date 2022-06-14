@@ -13,12 +13,13 @@ The dataset used in this case is cactus dataset.
 
 2) If you want to change the dataset change the base directory and path in the train.py
 
-    base_dir = ''
-    path = ''
+    base_dir = " "
+
+    path = " "
 
 3) If you want to evaluate the model run evaluate.py by changing the model path.
     
-    model_path = ''
+    model_path = " "
 
 4) The predicted outputs are saved in submission.csv
 
